@@ -26,7 +26,7 @@ class BelongsTo extends BaseBelongsTo
         $alias = $alias ?: $relatedTable;
 
         $table = $relatedTable . ' as ' . $alias;
-        $one = $this->getTable() . '.' . $this->getForeignKey();
+        $one = $this->parent->getTable() . '.' . $this->getForeignKey();
         $two = $alias . '.' . $this->getOtherKey();
 
         $q->join($table, $one, '=', $two, $type, $where);
