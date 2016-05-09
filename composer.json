@@ -1,0 +1,28 @@
+{
+    "name": "riesjart/relaquent",
+    "description": "Extension and addition of Laravel Eloquent relationships, create query joins based on Eloquent relationships",
+    "keywords": [
+        "eloquent",
+        "relation",
+        "relationships",
+        "join",
+        "laravel",
+        "database"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Riesjart",
+            "email": "reesyard@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.9",
+        "illuminate/database": "~5.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Riesjart\\Relaquent\\": "src/"
+        }
+    }
+}
