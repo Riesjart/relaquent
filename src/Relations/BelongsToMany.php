@@ -13,7 +13,7 @@ class BelongsToMany extends BaseBelongsToMany
      *
      * @return Model
      */
-    public function newInstance(array $attributes)
+    public function newInstance(array $attributes = [])
     {
         $instance = $this->related->newInstance($attributes);
 
