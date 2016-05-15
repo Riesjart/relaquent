@@ -7,6 +7,7 @@ use Riesjart\Relaquent\Relations\BelongsTo;
 use Riesjart\Relaquent\Relations\BelongsToMany;
 use Riesjart\Relaquent\Relations\HasMany;
 use Riesjart\Relaquent\Relations\HasManyThrough;
+use Riesjart\Relaquent\Relations\HasOne;
 use Riesjart\Relaquent\Relations\HasOneThrough;
 
 trait RelationsTrait
@@ -149,6 +150,26 @@ trait RelationsTrait
         return new HasManyThrough((new $related)->newQuery(), $this, $through, $firstKey, $secondKey, $localKey);
     }
 
+
+    /**
+     * Define a one-to-one relationship.
+     *
+     * @param $related
+     * @param string|null $foreignKey
+     * @param string|null $localKey
+     * @return HasOne
+     */
+    public function hasOne($related, $foreignKey = null, $localKey = null)
+    {
+        $foreignKey = $foreignKey ?: $this->getForeignKey();
+
+        $instance = new $related;
+
+        $localKey = $localKey ?: $this->getKeyName();
+
+        return new HasOne($instance->newQuery(), $this, $instance->getTable() . '.' . $foreignKey, $localKey);
+    }
+    
 
     /**
      * Define a has-one-through relationship.
