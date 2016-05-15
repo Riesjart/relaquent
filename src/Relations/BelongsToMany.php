@@ -59,6 +59,20 @@ class BelongsToMany extends BaseBelongsToMany
     /**
      * @param string $pivotClass
      *
+     * @return HasMany
+     */
+    public function toHasMany($pivotClass = null)
+    {
+        $pivotClass = $pivotClass ?: $this->getPivotClass();
+        $pivot = new $pivotClass;
+
+        return new HasMany($pivot->newQuery(), $this->parent, $pivot->getTable() . '.' . $this->foreignKey, $this->parent->getKeyName());
+    }
+
+    
+    /**
+     * @param string $pivotClass
+     *
      * @return HasOneThrough
      */
     public function toHasOneThrough($pivotClass = null)
