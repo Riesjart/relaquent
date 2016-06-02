@@ -48,6 +48,6 @@ class HasMany extends BaseHasMany
      */
     public function toHasOne()
     {
-        return new HasOne($this->related->newQuery(), $this->parent, $this->related->getTable() . '.' . $this->foreignKey, $this->localKey);
+        return new HasOne($this->related->newQuery(), $this->parent, $this->foreignKey, $this->localKey);
     }
 }
