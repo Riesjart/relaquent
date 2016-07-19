@@ -8,6 +8,23 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo as BaseBelongsTo;
 class BelongsTo extends BaseBelongsTo
 {
     // =======================================================================//
+    //          Converters
+    // =======================================================================//
+
+    /**
+     * @param string|null $foreignKey
+     *
+     * @return HasMany
+     */
+    public function toSelfReferring($foreignKey = null)
+    {
+        $foreignKey = $foreignKey?: $this->foreignKey;
+
+        return new HasMany($this->parent->newQuery(), $this->parent, $foreignKey, $this->foreignKey);
+    }
+
+
+    // =======================================================================//
     //          Join                                                                        
     // =======================================================================//
 
