@@ -10,6 +10,7 @@ use Riesjart\Relaquent\Relations\HasManyThrough;
 use Riesjart\Relaquent\Relations\HasOne;
 use Riesjart\Relaquent\Relations\HasOneThrough;
 use Riesjart\Relaquent\Relations\MorphMany;
+use Riesjart\Relaquent\Relations\MorphToMany;
 
 trait RelationsTrait
 {
@@ -204,6 +205,7 @@ trait RelationsTrait
      * @param string|null $type
      * @param string|null $id
      * @param string|null $localKey
+     *
      * @return MorphMany
      */
     public function morphMany($related, $name, $type = null, $id = null, $localKey = null)
@@ -220,5 +222,44 @@ trait RelationsTrait
         $localKey = $localKey ?: $this->getKeyName();
 
         return new MorphMany($instance->newQuery(), $this, $table . '.' . $type, $table . '.' . $id, $localKey);
+    }
+
+
+    /**
+     * Define a polymorphic many-to-many relationship.
+     *
+     * @param string $related
+     * @param string $name
+     * @param string|null $table
+     * @param string|null $foreignKey
+     * @param string|null $otherKey
+     * @param bool $inverse
+     *
+     * @return MorphToMany
+     */
+    public function morphToMany($related, $name, $table = null, $foreignKey = null, $otherKey = null, $inverse = false)
+    {
+        $caller = $this->getBelongsToManyCaller();
+
+        // First, we will need to determine the foreign key and "other key" for the
+        // relationship. Once we have determined the keys we will make the query
+        // instances, as well as the relationship instances we need for these.
+        $foreignKey = $foreignKey ?: $name.'_id';
+
+        $instance = new $related;
+
+        $otherKey = $otherKey ?: $instance->getForeignKey();
+
+        // Now we're ready to create a new query builder for this related model and
+        // the relationship instances for this relation. This relations will set
+        // appropriate query constraints then entirely manages the hydrations.
+        $query = $instance->newQuery();
+
+        $table = $table ?: Str::plural($name);
+
+        return new MorphToMany(
+            $query, $this, $name, $table, $foreignKey,
+            $otherKey, $caller, $inverse
+        );
     }
 }
