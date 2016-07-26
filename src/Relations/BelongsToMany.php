@@ -57,7 +57,7 @@ class BelongsToMany extends BaseBelongsToMany
     // =======================================================================//
 
     /**
-     * @param string $pivotClass
+     * @param string|null $pivotClass
      *
      * @return HasMany
      */
@@ -71,7 +71,7 @@ class BelongsToMany extends BaseBelongsToMany
 
     
     /**
-     * @param string $pivotClass
+     * @param string|null $pivotClass
      *
      * @return HasOneThrough
      */

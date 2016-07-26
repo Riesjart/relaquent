@@ -262,7 +262,7 @@ class HasOneThrough extends Relation
     /**
      * Get a paginator for the "select" statement.
      *
-     * @param int $perPage
+     * @param int|null $perPage
      * @param array $columns
      * @param string $pageName
      *
@@ -278,7 +278,7 @@ class HasOneThrough extends Relation
     /**
      * Paginate the given query into a simple paginator.
      *
-     * @param int $perPage
+     * @param int|null $perPage
      * @param array $columns
      * @return Paginator
      */
