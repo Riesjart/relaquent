@@ -9,6 +9,7 @@ use Riesjart\Relaquent\Relations\HasMany;
 use Riesjart\Relaquent\Relations\HasManyThrough;
 use Riesjart\Relaquent\Relations\HasOne;
 use Riesjart\Relaquent\Relations\HasOneThrough;
+use Riesjart\Relaquent\Relations\MorphMany;
 
 trait RelationsTrait
 {
@@ -192,5 +193,32 @@ trait RelationsTrait
         $localKey = $localKey ?: $this->getKeyName();
 
         return new HasOneThrough($related->newQuery(), $this, $through, $firstKey, $secondKey, $localKey);
+    }
+
+
+    /**
+     * Define a polymorphic one-to-many relationship.
+     *
+     * @param string $related
+     * @param string $name
+     * @param string|null $type
+     * @param string|null $id
+     * @param string|null $localKey
+     * @return MorphMany
+     */
+    public function morphMany($related, $name, $type = null, $id = null, $localKey = null)
+    {
+        $instance = new $related;
+
+        // Here we will gather up the morph type and ID for the relationship so that we
+        // can properly query the intermediate table of a relation. Finally, we will
+        // get the table and create the relationship instances for the developers.
+        list($type, $id) = $this->getMorphs($name, $type, $id);
+
+        $table = $instance->getTable();
+
+        $localKey = $localKey ?: $this->getKeyName();
+
+        return new MorphMany($instance->newQuery(), $this, $table . '.' . $type, $table . '.' . $id, $localKey);
     }
 }
