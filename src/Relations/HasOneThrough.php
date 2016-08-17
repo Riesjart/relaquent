@@ -13,6 +13,7 @@ use Illuminate\Database\Query\Expression;
 
 /**
  * TODO: load pivot in results
+ * TODO: add getRelationQuery method (e.g. whereHas query method not working)
  */
 class HasOneThrough extends Relation
 {
