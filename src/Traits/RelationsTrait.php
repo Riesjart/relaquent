@@ -10,6 +10,7 @@ use Riesjart\Relaquent\Relations\HasManyThrough;
 use Riesjart\Relaquent\Relations\HasOne;
 use Riesjart\Relaquent\Relations\HasOneThrough;
 use Riesjart\Relaquent\Relations\MorphMany;
+use Riesjart\Relaquent\Relations\MorphTo;
 use Riesjart\Relaquent\Relations\MorphToMany;
 
 trait RelationsTrait
@@ -25,6 +26,7 @@ trait RelationsTrait
      * @param string|null $foreignKey
      * @param string|null $otherKey
      * @param string|null $relation
+     *
      * @return BelongsTo
      */
     public function belongsTo($related, $foreignKey = null, $otherKey = null, $relation = null)
@@ -57,6 +59,56 @@ trait RelationsTrait
         $otherKey = $otherKey ?: $instance->getKeyName();
 
         return new BelongsTo($query, $this, $foreignKey, $otherKey, $relation);
+    }
+
+
+
+    /**
+     * Define a polymorphic, inverse one-to-one or many relationship.
+     *
+     * @param string $name
+     * @param string $type
+     * @param string $id
+     *
+     * @return MorphTo
+     */
+    public function morphTo($name = null, $type = null, $id = null)
+    {
+        // If no name is provided, we will use the backtrace to get the function name
+        // since that is most likely the name of the polymorphic interface. We can
+        // use that to get both the class and foreign key that will be utilized.
+        if (is_null($name)) {
+
+            list($current, $caller) = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+
+            $name = Str::snake($caller['function']);
+        }
+
+        list($type, $id) = $this->getMorphs($name, $type, $id);
+
+        // If the type value is null it is probably safe to assume we're eager loading
+        // the relationship. In this case we'll just pass in a dummy query where we
+        // need to remove any eager loads that may already be defined on a model.
+        if (empty($class = $this->$type)) {
+
+            return new MorphTo(
+                $this->newQuery()->setEagerLoads([]), $this, $id, null, $type, $name
+            );
+        }
+
+        // If we are not eager loading the relationship we will essentially treat this
+        // as a belongs-to style relationship since morph-to extends that class and
+        // we will pass in the appropriate values so that it behaves as expected.
+        else {
+
+            $class = $this->getActualClassNameForMorph($class);
+
+            $instance = new $class;
+
+            return new MorphTo(
+                $instance->newQuery(), $this, $id, $instance->getKeyName(), $type, $name
+            );
+        }
     }
     
     
