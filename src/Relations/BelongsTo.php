@@ -8,6 +8,19 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo as BaseBelongsTo;
 class BelongsTo extends BaseBelongsTo
 {
     // =======================================================================//
+    //          Getters
+    // =======================================================================//
+
+    /**
+     * @return mixed
+     */
+    public function getForeignValue()
+    {
+        return $this->getParent()->{$this->foreignKey};
+    }
+
+
+    // =======================================================================//
     //          Flags
     // =======================================================================//
 
@@ -16,7 +29,7 @@ class BelongsTo extends BaseBelongsTo
      */
     public function notNull()
     {
-        return !! $this->getParent()->{$this->foreignKey};
+        return ! is_null($this->getParent()->{$this->foreignKey});
     }
 
 
