@@ -16,7 +16,7 @@ class BelongsTo extends BaseBelongsTo
      */
     public function getForeignValue()
     {
-        return $this->getParent()->{$this->foreignKey};
+        return $this->parent->{$this->foreignKey};
     }
 
 
@@ -27,9 +27,18 @@ class BelongsTo extends BaseBelongsTo
     /**
      * @return bool
      */
+    public function isNull()
+    {
+        return is_null($this->getForeignValue());
+    }
+
+
+    /**
+     * @return bool
+     */
     public function notNull()
     {
-        return ! is_null($this->getParent()->{$this->foreignKey});
+        return ! $this->isNull();
     }
 
 

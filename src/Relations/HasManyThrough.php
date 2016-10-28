@@ -81,7 +81,7 @@ class HasManyThrough extends BaseHasManyThrough
         $alias = $alias ?: $relatedTable;
         $pivotAlias = $alias . '_pivot';
 
-        $table = $this->getParent()->getTable() . ' as ' . $pivotAlias;
+        $table = $this->parent->getTable() . ' as ' . $pivotAlias;
 
         $one = $this->getTable() . '.' . $this->getPlainLocalKey();
         $two = $pivotAlias . '.' . $this->getPlainThroughKey();
@@ -89,7 +89,7 @@ class HasManyThrough extends BaseHasManyThrough
         $q->join($table, $one, '=', $two, $type, $where);
 
         $table = $relatedTable . ' as ' . $alias;
-        $one = $pivotAlias . '.' . $this->getParent()->getKeyName();
+        $one = $pivotAlias . '.' . $this->parent->getKeyName();
         $two = $alias . '.' . $this->getPlainForeignKey();
 
         $q->join($table, $one, '=', $two, $type, $where);

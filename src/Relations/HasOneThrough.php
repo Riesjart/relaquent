@@ -504,7 +504,7 @@ class HasOneThrough extends Relation
         $alias = $alias ?: $relatedTable;
         $pivotAlias = $alias . '_pivot';
 
-        $table = $this->getParent()->getTable() . ' as ' . $pivotAlias;
+        $table = $this->parent->getTable() . ' as ' . $pivotAlias;
         $one = $this->getTable() . '.' . $this->getPlainLocalKey();
         $two = $pivotAlias . '.' . $this->getPlainThroughKey();
 
